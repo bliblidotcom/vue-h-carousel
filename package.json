@@ -1,0 +1,95 @@
+{
+  "name": "vue-h-carousel",
+  "description": "Native Vue Zoom images",
+  "version": "0.0.14",
+  "author": {
+    "name": "hidayat.febiansyah",
+    "email": "hidayat.febiansyah@gdn-commerce.com"
+  },
+  "bugs": {
+    "url": "https://github.com/bliblidotcom/vue-h-carousel/issues"
+  },
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-eslint": "^7.1.0",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-istanbul": "^3.1.2",
+    "babel-polyfill": "6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-flow-vue": "^1.0.0",
+    "babel-preset-power-assert": "^1.0.0",
+    "buble": "^0.14.0",
+    "chromedriver": "^2.27.2",
+    "codecov": "^3.0.0",
+    "conventional-changelog-cli": "^1.2.0",
+    "conventional-github-releaser": "^1.1.3",
+    "copy-webpack-plugin": "^4.3.1",
+    "cross-env": "^5.0.5",
+    "cross-spawn": "^5.0.1",
+    "eslint": "^3.14.1",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "eslint-plugin-vue-libs": "^1.2.0",
+    "flow-bin": "^0.38.0",
+    "gitbook-cli": "^2.3.0",
+    "html-webpack-plugin": "^2.19.0",
+    "http-server": "^0.9.0",
+    "karma": "^1.4.1",
+    "karma-chrome-launcher": "^2.1.1",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.2",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sauce-launcher": "^1.1.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^2.0.2",
+    "mocha": "^3.2.0",
+    "mocha-loader": "^1.1.1",
+    "nightwatch": "^0.9.12",
+    "nightwatch-helpers": "^1.2.0",
+    "power-assert": "^1.4.2",
+    "selenium-server": "2.53.1",
+    "uglify-js": "^2.7.5",
+    "vue": "^2.1.10",
+    "vue-loader": "^13.7.0",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.2.1",
+    "webpack-merge": "^4.1.1"
+  },
+  "files": [
+    "dist/vue-h-carousel.js",
+    "dist/vue-h-carousel.min.js"
+  ],
+  "homepage": "https://github.com/bliblidotcom/vue-h-carousel#readme",
+  "main": "dist/vue-h-carousel.js",
+  "module": "dist/vue-h-carousel.js",
+  "unpkg": "dist/vue-h-carousel.js",
+  "keywords": [
+    "plugin",
+    "vue",
+    "vuejs",
+    "carousel"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bliblidotcom/vue-h-carousel.git"
+  },
+  "scripts": {
+    "clean": "rm -rf coverage && rm -rf dist/*.js* && rm ./*.log",
+    "dev": "cross-env BABEL_ENV=test webpack-dev-server --inline --hot --open --content-base ./test/unit/ --config config/webpack.dev.conf.js",
+    "start": "npm run dev",
+    "lint": "eslint src test config",
+    "test": "npm run lint && npm run flow && npm run test:cover && npm run test:e2e",
+    "test:cover": "cross-env BABEL_ENV=test karma start config/karma.cover.conf.js",
+    "test:cover-upload": "npm run test:cover && codecov",
+    "test:unit": "cross-env BABEL_ENV=test karma start config/karma.unit.conf.js",
+    "build": "rm -rf dist/*.js* && webpack --config config/webpack.prod.conf.js"
+  }
+}
