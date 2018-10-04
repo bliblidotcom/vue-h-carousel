@@ -1,4 +1,4 @@
-# vue-h-zoom
+# vue-h-carousel
 
 
 [![codecov](https://codecov.io/gh/bliblidotcom/vue-h-carousel/branch/master/graph/badge.svg)](https://codecov.io/gh/bliblidotcom/vue-h-carousel)
