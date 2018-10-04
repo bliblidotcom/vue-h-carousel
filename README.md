@@ -1,39 +1,37 @@
 # vue-h-zoom
 
 
-[![codecov](https://codecov.io/gh/bliblidotcom/vue-h-zoom/branch/master/graph/badge.svg)](https://codecov.io/gh/bliblidotcom/vue-h-zoom)
-[![npm](https://img.shields.io/npm/v/vue-h-zoom.svg)](https://www.npmjs.com/package/vue-h-zoom)
+[![codecov](https://codecov.io/gh/bliblidotcom/vue-h-carousel/branch/master/graph/badge.svg)](https://codecov.io/gh/bliblidotcom/vue-h-carousel)
+[![npm](https://img.shields.io/npm/v/vue-h-carousel.svg)](https://www.npmjs.com/package/vue-h-carousel)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
-Vue Native Zoom images
+Vue Carousel
 
 ## Installation
 
 ```js
-npm i --save-dev vue-h-zoom
+npm i --save-dev vue-h-carousel
 ```
 
 ## About
-
-This plugin is intended to provide native implementation of zooming library. It support thumbnail image and full size
-image as parameter. Location of zooming preview is configurable through absolute location.
+// TODO
 
 ### Browser
 
-Include the script file, then install the component with `Vue.use(VueHZoom);` e.g.:
+Include the script file, then install the component with `Vue.use(VueHCarousel);` e.g.:
 
 ```html
 <script type="text/javascript" src="node_modules/vuejs/dist/vue.min.js"></script>
-<script type="text/javascript" src="node_modules/vue-h-zoom/dist/vue-h-zoom.min.js"></script>
+<script type="text/javascript" src="node_modules/vue-h-carousel/dist/vue-h-carousel.min.js"></script>
 <script type="text/javascript">
-  Vue.use(VueHZoom);
+  Vue.use(VueHCarousel);
 </script>
 ```
 
 ### Module
 
 ```js
-import VueHZoom from 'vue-h-zoom';
+import VueHCarousel from 'vue-h-carousel';
 ```
 
 ## Usage
@@ -41,14 +39,12 @@ import VueHZoom from 'vue-h-zoom';
 Use in template for example as:
 
 ```html
-<vue-h-zoom image="/assets/bugatti-chiron-white_01_thumb.jpg"
-  image-full="/assets/bugatti-chiron-white_01.jpg"
-  :zoom-level="4"></vue-h-zoom>
+<vue-h-carousel images=""></vue-h-carousel>
 ```
 
 ## Important notes
 
-To be able to import image locally, you need to register the vue-h-zoom tag to the vue loader, add this to your
+To be able to import image locally, you need to register the vue-h-carousel tag to the vue loader, add this to your
 webpack config:
 
 ``` js
@@ -60,7 +56,7 @@ webpack config:
     },
     // other vue-loader options go here
     transformToRequire: {
-      'vue-h-zoom': ['image', 'image-full']
+      'vue-h-carousel': ['image', 'image-full']
     }
   }
 },
@@ -70,19 +66,12 @@ webpack config:
 
 | Attribute        | Type                                            | Default              | Description      |
 | :---             | :---:                                           | :---:                | :---             |
-| image            | String | - | Image to be displayed in thumbnail. Used also in the zoom if imageFull param is not given (required) |
-| image-full       | String                                          | ''       | Large version of image|
-| width           | Number                                           | 200 | Width of thumbnail in px|
-| height          | Number                                           | 200 | Height of thumbnail in px|
-| zoom-level      | Number                                           | 4 | Zoom level |
-| zoom-window-size | Number                                          | 2 | Zoom window size multiplier, relative with thumbnail size |
-| zoom-window-x | Number                                        | 300 | Location absolute on x-axis for zoom window |
-| zoom-window-y | Number                                        | 300 | Location absolute on y-axis for zoom window |
+| image            | String | - | Image to be displayed in thumbnail. Used also in the carousel if imageFull param is not given (required) |
 
 ## Preview
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bliblidotcom/vue-h-zoom/master/docs/vue-h-zoom-preview.jpg">
+  <img src="https://raw.githubusercontent.com/bliblidotcom/vue-h-carousel/master/docs/vue-h-carousel-preview.jpg">
 </p>
 
 
