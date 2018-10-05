@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    {{(targetIndex - currentIndex)}} -- {{distance}} -- {{slidingStep}}
     <ul class="slider"
       :style="sliderStyle">
       <li class="slider-item"

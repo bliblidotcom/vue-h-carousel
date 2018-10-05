@@ -1,12 +1,11 @@
 const px = 'px'
-const ANIMATION_STEP = 10 // ms
+const ANIMATION_STEP = 15 // ms
 
 export default {
   name: 'vue-h-carousel',
   data () {
     return {
       currentIndex: 0,
-      sliding: 0,
       transPos: 0,
       targetIndex: 0
     }
@@ -41,7 +40,7 @@ export default {
       type: Number
     },
     slidingDuration: {
-      default: 1000,
+      default: 1200,
       type: Number
     }
   },
@@ -102,6 +101,9 @@ export default {
       if (this.targetIndex === 0 && this.currentIndex === lastImage) return 1
       return this.targetIndex - this.currentIndex
     },
+    sliding () {
+      return this.distance / Math.abs(this.distance) || 0
+    },
     slidingStep () {
       const step = (Math.abs(this.distance) * this.slideWidth) / (this.slidingDuration / ANIMATION_STEP)
       return step * this.normalcdf(this.sliding * this.transPos / this.slideWidth) * 4
@@ -124,8 +126,6 @@ export default {
       if (this.sliding) return
 
       this.targetIndex = i
-      const distance = i - this.currentIndex
-      this.sliding = distance / Math.abs(distance) || 0
       if (this.targetIndex >= this.images.length) {
         this.targetIndex = 0
       } else if (this.targetIndex < 0) {
@@ -139,10 +139,8 @@ export default {
       this.currentIndex = i
     },
     move () {
-      console.log(this.transPos)
       if (Math.abs(this.transPos) >= this.slideWidth) {
         this.transPos = 0
-        this.sliding = 0
         this.setSlide(this.targetIndex)
         return
       }
