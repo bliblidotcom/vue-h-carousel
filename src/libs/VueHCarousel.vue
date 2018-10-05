@@ -1,12 +1,12 @@
 <template>
   <div class="content">
+    {{(targetIndex - currentIndex)}} -- {{distance}} -- {{slidingStep}}
     <ul class="slider"
       :style="sliderStyle">
       <li class="slider-item"
-        v-for="(i, k) in images"
-        v-if="currentIndex === k"
-        :key="'image-' + k"
-        :style="itemStyle(i, k)">
+          :style="itemStyles[k]"
+          v-for="(i, k) in slideImages"
+          :key="'image-slider-' + k">
         <a :href="i.url" target="_blank">
           <img :src="i.src" :alt="i.alt"/>
         </a>
@@ -44,11 +44,6 @@
 }
 .slider-item {
   position: absolute;
-  animation: fadein 1s;
-}
-@keyframes fadein {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 .arrow {
   position: absolute;

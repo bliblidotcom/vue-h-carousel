@@ -50,6 +50,12 @@ new window.Vue({
       ]
     }
   },
-  template: `<vue-h-zoom :images="images" :width="840" :height="280"></vue-h-zoom>`,
+  template: `
+  <vue-h-zoom :images="images"
+    :width="840"
+    :height="280"
+    :leftWingWidth="100"
+    :rightWingWidth="344">
+  </vue-h-zoom>`,
   components: { VueHZoom }
 })
