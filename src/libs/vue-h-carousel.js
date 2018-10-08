@@ -1,4 +1,5 @@
 const px = 'px'
+const MOVE_THRESHOLD = 5
 
 export default {
   name: 'vue-h-carousel',
@@ -7,7 +8,10 @@ export default {
       currentIndex: 0,
       transPos: 0,
       targetIndex: 0,
-      isMouseOver: false
+      isMouseOver: false,
+      dragStartPos: 0,
+      isClicking: false,
+      isDrag: false
     }
   },
   props: {
@@ -40,24 +44,21 @@ export default {
       type: Number
     },
     interval: {
-      default: 0, // no auto play
+      default: 0, // 0 for no auto play
       type: Number
     },
     postPaginationLabel: {
       default: '',
       type: String
-    },
-    prePaginationLabel: {
-      default: '',
-      type: String
     }
   },
   watch: {
+    // restart cycle when interval changed
     interval () {
       this.startCycle()
     },
-    distance (v) {
-      // if distance is 0 (target reached), do not update style
+    // watch for pixel move, and draw only when the value is not 0
+    pixMove (v) {
       if (v === 0) return
       this.createStyles()
     }
@@ -65,10 +66,12 @@ export default {
   mounted () {
     this.startCycle()
     this.createStyles()
+    this.handleTouch()
   },
   destroyed () {
     this.clearCycle()
     this.removeStyles()
+    this.removeTouchHandler()
   },
   computed: {
     animationDuration () {
@@ -80,8 +83,8 @@ export default {
       return this.sliding === 0
         ? ''
         : this.sliding > 0
-        ? 'slideRight'
-        : 'slideLeft'
+          ? 'slideRight'
+          : 'slideLeft'
     },
     itemStyles () {
       const result = []
@@ -104,6 +107,9 @@ export default {
     windowWingSize () {
       return Math.floor(this.windowSize / 2)
     },
+    currentImage () {
+      return this.images[this.currentIndex] || {}
+    },
     slideImages () {
       const resultPre = []
       const resultPost = []
@@ -113,7 +119,7 @@ export default {
         resultPre.push(this.images[preIndex])
         resultPost.push(this.images[postIndex])
       }
-      return resultPre.reverse().concat([this.images[this.currentIndex] || {}]).concat(resultPost)
+      return resultPre.reverse().concat([this.currentImage]).concat(resultPost)
     },
     slideWidth () {
       return this.width + this.padding
@@ -138,14 +144,24 @@ export default {
     sliding () {
       return this.distance / Math.abs(this.distance) || 0
     },
+    pixMove () {
+      return Math.abs((this.distance * this.slideWidth) + this.transPos)
+    },
+    touchHandlersMap () {
+      return {
+        touchstart: this.touchStart,
+        touchend: this.touchEnd,
+        touchcancel: this.touchCancel,
+        touchmove: this.touchMove
+      }
+    },
     innerStyles () {
-      const percentage = Math.abs(this.distance) * 100
       return `
       @keyframes slideLeft {
-        to { transform: translateX(${percentage}%); }
+        to { transform: translateX(${this.pixMove}px); }
       }
       @keyframes slideRight {
-        to { transform: translateX(${-percentage}%); }
+        to { transform: translateX(${-this.pixMove}px); }
       }
       `
     }
@@ -155,14 +171,16 @@ export default {
       const relPos = i - this.windowWingSize
       return this.transPos + this.leftWingWidth + (relPos * this.slideWidth)
     },
-    buttonStyle (k) {
-      return this.currentIndex === k ? 'active-slide' : ''
+    clearState () {
+      this.transPos = 0
+      this.isDrag = false
     },
     slide (i) {
       this.go(this.currentIndex + Number(i))
     },
     setSlide (i) {
       this.currentIndex = i
+      this.clearState()
     },
     go (i) {
       // skip while sliding
@@ -174,9 +192,12 @@ export default {
       } else if (this.targetIndex < 0) {
         this.targetIndex = this.images.length - 1
       }
+      // need to call setSlide a bit faster than animation ending
+      // why 50ms ? .. magic number
       setTimeout(() => {
+        if (this.currentIndex === this.targetIndex) return
         this.setSlide(this.targetIndex)
-      }, this.slidingDuration)
+      }, this.slidingDuration - 50)
     },
     clearCycle () {
       try {
@@ -211,6 +232,76 @@ export default {
     },
     mouseOver (v) {
       this.isMouseOver = v
+    },
+    touchStart (e) {
+      this.mouseOver(true)
+      this.dragStartPos = e.touches[0].clientX
+    },
+    touchEnd (e) {
+      if (Math.abs(this.transPos) < MOVE_THRESHOLD) {
+        this.transPos = 0
+        return
+      }
+      const direction = this.transPos / Math.abs(this.transPos)
+      const steps = -direction * Math.ceil(this.transPos / direction / this.slideWidth)
+      this.slide(steps)
+      setTimeout(() => {
+        this.mouseOver(false)
+      }, this.slidingDuration)
+    },
+    touchCancel () {
+      this.mouseOver(false)
+    },
+    touchMove (e) {
+      const pos = e.touches[0].clientX
+      const distance = pos - this.dragStartPos
+      this.transPos = distance
+    },
+    mouseDown (e) {
+      e.preventDefault()
+      this.dragStartPos = e.clientX
+      this.isClicking = true
+    },
+    mouseUp () {
+      if (Math.abs(this.transPos) < MOVE_THRESHOLD) {
+        this.transPos = 0
+        return
+      }
+      const direction = this.transPos / Math.abs(this.transPos)
+      const steps = -direction * Math.ceil(this.transPos / direction / this.slideWidth)
+      this.slide(steps)
+      this.isClicking = false
+    },
+    mouseMove (e) {
+      if (!this.isClicking) return
+      this.isDrag = true
+      const pos = e.clientX
+      const distance = pos - this.dragStartPos
+      this.transPos = distance
+    },
+    // handle opening window here
+    handleItemUrl (url, e) {
+      e.preventDefault()
+      if (this.isDrag) return
+      window.open(url)
+    },
+    handleTouch () {
+      const wrapper = this.$refs.wrapper
+      if (!wrapper) return
+      const addEL = wrapper.addEventListener
+      addEL('touchstart', this.touchStart)
+      addEL('touchend', this.touchEnd)
+      addEL('touchcancel', this.touchCancel)
+      addEL('touchmove', this.touchMove)
+    },
+    removeTouchHandler () {
+      const wrapper = this.$refs.wrapper
+      if (!wrapper) return
+      const removeEL = wrapper.removeEventListener
+      removeEL('touchstart', this.touchStart)
+      removeEL('touchend', this.touchEnd)
+      removeEL('touchcancel', this.touchCancel)
+      removeEL('touchmove', this.touchMove)
     }
   }
 }

@@ -1,13 +1,19 @@
 <template>
-  <div class="content">
+  <div class="content"
+       @mouseover="mouseOver(true)"
+       @mouseleave="mouseOver(false)">
     <div class="slider"
       :style="sliderStyle">
-      <div class="slider-wrapper" @mouseover="mouseOver(true)" @mouseleave="mouseOver(false)">
+      <div class="slider-wrapper" ref="wrapper">
         <div class="slider-item"
             :style="itemStyles[k]"
             v-for="(i, k) in slideImages"
-            :key="'image-slider-' + k">
-          <a :href="i.url" target="_blank">
+            :key="'image-slider-' + k"
+             draggable="true"
+             @mousedown="mouseDown"
+             @mouseup="mouseUp"
+             @mousemove="mouseMove">
+          <a @click="handleItemUrl(i.url, $event)" target="_blank">
             <img :src="i.src" :alt="i.alt"/>
           </a>
         </div>
@@ -28,12 +34,10 @@
         <li
           v-for="(i, k) in images"
           @click="go(k)"
-          :class="buttonStyle(k)" :key="k">
+          :class="{'active-slide': currentIndex === k}" :key="k">
           <span class="button-circle"></span>
         </li>
-        <li class="see-all" v-if="postPaginationLabel">
-          <a :href="postPaginationLabel">Lihat Semua Promo</a>
-        </li>
+        <li class="see-all" v-html="postPaginationLabel"></li>
       </ul>
     </div>
     <div ref="innerStyle"></div>

@@ -16,6 +16,7 @@ new window.Vue({
   el: 'app',
   data () {
     return {
+      label: '<a href="/promosi">Lihat Semua Promo</a>',
       images: [
         {
           url: 'http://abc.com',
@@ -57,7 +58,8 @@ new window.Vue({
     :leftWingWidth="200"
     :rightWingWidth="200"
     :interval="3000"
-    :postPaginationLabel="'/promosi'">
+    :slidingDuration="2000"
+    :postPaginationLabel="label">
   </vue-h-zoom>`,
   components: { VueHZoom }
 })
