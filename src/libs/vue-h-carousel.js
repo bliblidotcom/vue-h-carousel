@@ -1,5 +1,4 @@
 const px = 'px'
-const ANIMATION_STEP = 16 // ms
 
 export default {
   name: 'vue-h-carousel',
@@ -7,8 +6,7 @@ export default {
     return {
       currentIndex: 0,
       transPos: 0,
-      targetIndex: 0,
-      intervalId: 0
+      targetIndex: 0
     }
   },
   props: {
@@ -36,12 +34,8 @@ export default {
       default: 16,
       type: Number
     },
-    windowSize: {
-      default: 5,
-      type: Number
-    },
     slidingDuration: {
-      default: 1600,
+      default: 1000,
       type: Number
     },
     interval: {
@@ -52,20 +46,36 @@ export default {
   watch: {
     interval () {
       this.startCycle()
+    },
+    innerStyles () {
+      this.createStyles()
     }
   },
   mounted () {
     this.startCycle()
+    this.createStyles()
   },
   destroyed () {
     this.clearCycle()
+    this.removeStyles()
   },
   computed: {
     itemStyles () {
       const result = []
+      const animationDuration = this.sliding !== 0
+        ? (Number(this.slidingDuration) / 1000 + 's')
+        : ''
+      const animationName = this.sliding === 0
+        ? ''
+        : this.sliding > 0
+          ? 'slideRight'
+          : 'slideLeft'
       for (let i = 0; i < this.windowSize; i++) {
         result.push({
-          left: this.imagePos(i) + px
+          left: this.imagePos(i) + px,
+          width: this.slideWidth + px,
+          animationDuration,
+          animationName
         })
       }
       return result
@@ -73,17 +83,22 @@ export default {
     imagesLength () {
       return this.images.length
     },
+    windowSize () {
+      return (this.imagesLength * 2) + 1
+    },
+    windowWingSize () {
+      return Math.floor(this.windowSize / 2)
+    },
     slideImages () {
-      const wing = Math.floor(this.windowSize / 2)
       const resultPre = []
       const resultPost = []
-      for (let i = 0; i < wing; i++) {
-        const preIndex = (this.imagesLength + this.currentIndex - i) % this.imagesLength
+      for (let i = 0; i < this.windowWingSize; i++) {
+        const preIndex = (this.imagesLength + this.currentIndex - i - 1) % this.imagesLength
         const postIndex = (this.imagesLength + this.currentIndex + i + 1) % this.imagesLength
         resultPre.push(this.images[preIndex])
         resultPost.push(this.images[postIndex])
       }
-      return resultPre.concat([this.images[this.currentIndex] || {}]).concat(resultPost)
+      return resultPre.reverse().concat([this.images[this.currentIndex] || {}]).concat(resultPost)
     },
     slideWidth () {
       return this.width + this.padding
@@ -120,14 +135,22 @@ export default {
     sliding () {
       return this.distance / Math.abs(this.distance) || 0
     },
-    slidingStep () {
-      const step = (Math.abs(this.distance) * this.slideWidth) / (this.slidingDuration / ANIMATION_STEP)
-      return step * this.normalcdf(this.sliding * this.transPos / this.slideWidth) * 4
+    innerStyles () {
+      const percentage = Math.abs(this.distance) * 100
+      return `
+      @keyframes slideLeft {
+        to { transform: translateX(${percentage}%); }
+      }
+      @keyframes slideRight {
+        to { transform: translateX(${-percentage}%); }
+      }
+      `
     }
   },
   methods: {
     imagePos (i) {
-      return this.transPos + this.leftWingWidth + ((i - 2) * this.slideWidth)
+      const relPos = i - this.windowWingSize
+      return this.transPos + this.leftWingWidth + (relPos * this.slideWidth)
     },
     buttonStyle (k) {
       return {
@@ -137,8 +160,11 @@ export default {
     slide (i) {
       this.go(this.currentIndex + Number(i))
     },
+    setSlide (i) {
+      this.currentIndex = i
+    },
     go (i) {
-      // skip if while sliding
+      // skip while sliding
       if (this.sliding) return
 
       this.targetIndex = i
@@ -147,40 +173,18 @@ export default {
       } else if (this.targetIndex < 0) {
         this.targetIndex = this.images.length - 1
       }
-      if (this.currentIndex !== this.targetIndex) {
-        this.startAnimation()
-      }
-    },
-    setSlide (i) {
-      this.currentIndex = i
-    },
-    move () {
-      if (Math.abs(this.transPos) >= this.slideWidth) {
-        this.transPos = 0
+      setTimeout(() => {
         this.setSlide(this.targetIndex)
-        return
-      }
-      this.transPos += (-this.sliding * this.slidingStep)
-      setTimeout(this.move, ANIMATION_STEP)
+      }, this.slidingDuration)
     },
     startAnimation () {
       this.transPos = 0
-      setTimeout(this.move, ANIMATION_STEP)
-    },
-    normalcdf (X) {
-      // cherry picked from here: http://www.math.ucla.edu/~tom/distributions/normal.html
-      const T = 1 / (1 + 0.2316419 * Math.abs(X))
-      const D = 0.3989423 * Math.exp(-X * X / 2)
-      var Prob = D * T * (0.3193815 + T * (-0.3565638 + T * (1.781478 + T * (-1.821256 + T * 1.330274))))
-      if (X > 0) {
-        Prob = 1 - Prob
-      }
-      return Prob
     },
     clearCycle () {
       try {
         clearInterval(this.intervalId)
-      } catch (e) {}
+      } catch (e) {
+      }
     },
     startCycle () {
       this.clearCycle()
@@ -189,6 +193,22 @@ export default {
       setInterval(() => {
         this.slide(1)
       }, this.interval)
+    },
+    removeStyles () {
+      const ref = this.$refs.innerStyle
+      try {
+        ref.removeChild(ref.childNodes[0])
+      } catch (e) {
+      }
+    },
+    createStyles () {
+      const ref = this.$refs.innerStyle
+      if (!ref) return
+      this.removeStyles()
+      const style = window.document.createElement('style')
+      style.type = 'text/css'
+      style.appendChild(window.document.createTextNode(this.innerStyles))
+      ref.appendChild(style)
     }
   }
 }

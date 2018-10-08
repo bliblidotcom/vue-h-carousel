@@ -55,7 +55,8 @@ new window.Vue({
     :width="840"
     :height="280"
     :leftWingWidth="100"
-    :rightWingWidth="344">
+    :rightWingWidth="344"
+    :slidingDuration="2000">
   </vue-h-zoom>`,
   components: { VueHZoom }
 })

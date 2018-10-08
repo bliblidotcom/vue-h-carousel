@@ -1,5 +1,7 @@
 <template>
   <div class="content">
+    {{sliding}} -
+    {{slideImages.length}} - {{slidingDuration}}
     <ul class="slider"
       :style="sliderStyle">
       <li class="slider-item"
@@ -29,6 +31,8 @@
         o
       </li>
     </ul>
+    <div ref="innerStyle">
+    </div>
   </div>
 </template>
 
