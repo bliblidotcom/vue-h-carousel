@@ -1,34 +1,41 @@
 <template>
   <div class="content">
-    <ul class="slider"
+    <div class="slider"
       :style="sliderStyle">
-      <li class="slider-item"
-          :style="itemStyles[k]"
-          v-for="(i, k) in slideImages"
-          :key="'image-slider-' + k">
-        <a :href="i.url" target="_blank">
-          <img :src="i.src" :alt="i.alt"/>
-        </a>
-      </li>
-    </ul>
-    <div class="arrow arrow-right"
-      :style="rightArrowStyle"
-      @click="slide(1)">
-      &gt;
+      <div class="slider-wrapper">
+        <div class="slider-item"
+            :style="itemStyles[k]"
+            v-for="(i, k) in slideImages"
+            :key="'image-slider-' + k">
+          <a :href="i.url" target="_blank">
+            <img :src="i.src" :alt="i.alt"/>
+          </a>
+        </div>
+      </div>
+      <div class="slider-navigation">
+        <div class="arrow arrow-right"
+          @click="slide(1)">
+          <img src="assets/arrowright.png" alt=""/>
+        </div>
+        <div class="arrow arrow-left"
+          @click="slide(-1)">
+          <img src="assets/arrowleft.png" alt=""/>
+        </div>
+      </div>
     </div>
-    <div class="arrow arrow-left"
-      :style="leftArrowStyle"
-      @click="slide(-1)">
-      &lt;
+    <div class="slider-pagination">
+      <ul class="button">
+        <li
+          v-for="(i, k) in images"
+          @click="go(k)"
+          :class="buttonStyle(k)" :key="k">
+          <span class="button-circle"></span>
+        </li>
+        <li class="see-all" v-if="postPaginationLabel">
+          <a :href="postPaginationLabel">Lihat Semua Promo</a>
+        </li>
+      </ul>
     </div>
-    <ul class="button">
-      <li
-        v-for="(i, k) in images"
-        @click="go(k)"
-        :style="buttonStyle(k)">
-        o
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -40,25 +47,74 @@
   position: relative;
   list-style: none;
   padding: 0px;
+  margin: 0 auto;
 }
 .slider-item {
   position: absolute;
 }
+.slider-item img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.slider-pagination {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+}
 .arrow {
   position: absolute;
-  font-size: 70px;
-  font-size-adjust: 0.58;
   cursor: pointer;
+  top: 50%;
+  transform: translate(0, -50%);
+  background-color: #fff;
+  line-height: 0;
+  padding: 20px 5px;
+}
+.arrow img {
+  width: 22px;
+}
+.arrow-right {
+  right: 0;
+  box-shadow: -2px 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+.arrow-left {
+  left: 0;
+  box-shadow: -2px 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 .button {
   text-align: center;
   margin: auto;
-  display:flex;
   list-style: none;
+  padding: 0;
 }
 .button > li {
   cursor: pointer;
   padding: 10px;
+  display: inline-block;
+}
+.button-circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #cccccc;
+}
+.active-slide .button-circle {
+  background-color: #0096d9;
+}
+.see-all {
+  font-size: 14px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  color: #0096d9;
+  font-family: inherit;
 }
 </style>
 

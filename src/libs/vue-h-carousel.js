@@ -41,12 +41,20 @@ export default {
       type: Number
     },
     slidingDuration: {
-      default: 1600,
+      default: 500,
       type: Number
     },
     interval: {
       default: 0, // no auto play
       type: Number
+    },
+    postPaginationLabel: {
+      default: '',
+      type: String
+    },
+    prePaginationLabel: {
+      default: '',
+      type: String
     }
   },
   watch: {
@@ -99,18 +107,6 @@ export default {
         overflow: 'hidden'
       }
     },
-    rightArrowStyle () {
-      return {
-        left: (this.totalWidth - 20) + px,
-        top: ((this.height / 2) - 30) + px
-      }
-    },
-    leftArrowStyle () {
-      return {
-        left: 0 + px,
-        top: ((this.height / 2) - 30) + px
-      }
-    },
     distance () {
       const lastImage = this.imagesLength - 1
       if (this.targetIndex === lastImage && this.currentIndex === 0) return -1
@@ -130,9 +126,7 @@ export default {
       return this.transPos + this.leftWingWidth + ((i - 2) * this.slideWidth)
     },
     buttonStyle (k) {
-      return {
-        fontWeight: this.currentIndex === k ? 'bold' : ''
-      }
+      return this.currentIndex === k ? 'active-slide' : ''
     },
     slide (i) {
       this.go(this.currentIndex + Number(i))
