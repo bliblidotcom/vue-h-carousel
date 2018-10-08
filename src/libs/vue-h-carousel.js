@@ -1,5 +1,5 @@
 const px = 'px'
-const ANIMATION_STEP = 15 // ms
+const ANIMATION_STEP = 16 // ms
 
 export default {
   name: 'vue-h-carousel',
@@ -7,7 +7,8 @@ export default {
     return {
       currentIndex: 0,
       transPos: 0,
-      targetIndex: 0
+      targetIndex: 0,
+      intervalId: 0
     }
   },
   props: {
@@ -40,9 +41,24 @@ export default {
       type: Number
     },
     slidingDuration: {
-      default: 1200,
+      default: 1600,
+      type: Number
+    },
+    interval: {
+      default: 0, // no auto play
       type: Number
     }
+  },
+  watch: {
+    interval () {
+      this.startCycle()
+    }
+  },
+  mounted () {
+    this.startCycle()
+  },
+  destroyed () {
+    this.clearCycle()
   },
   computed: {
     itemStyles () {
@@ -160,6 +176,19 @@ export default {
         Prob = 1 - Prob
       }
       return Prob
+    },
+    clearCycle () {
+      try {
+        clearInterval(this.intervalId)
+      } catch (e) {}
+    },
+    startCycle () {
+      this.clearCycle()
+      if (this.interval < 1) return
+
+      setInterval(() => {
+        this.slide(1)
+      }, this.interval)
     }
   }
 }
