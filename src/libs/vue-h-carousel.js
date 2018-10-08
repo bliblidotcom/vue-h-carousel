@@ -6,7 +6,8 @@ export default {
     return {
       currentIndex: 0,
       transPos: 0,
-      targetIndex: 0
+      targetIndex: 0,
+      isMouseOver: false
     }
   },
   props: {
@@ -35,7 +36,7 @@ export default {
       type: Number
     },
     slidingDuration: {
-      default: 500,
+      default: 1000,
       type: Number
     },
     interval: {
@@ -55,7 +56,9 @@ export default {
     interval () {
       this.startCycle()
     },
-    innerStyles () {
+    distance (v) {
+      // if distance is 0 (target reached), do not update style
+      if (v === 0) return
       this.createStyles()
     }
   },
@@ -68,22 +71,26 @@ export default {
     this.removeStyles()
   },
   computed: {
-    itemStyles () {
-      const result = []
-      const animationDuration = this.sliding !== 0
+    animationDuration () {
+      return this.sliding !== 0
         ? (Number(this.slidingDuration) / 1000 + 's')
         : ''
-      const animationName = this.sliding === 0
+    },
+    animationName () {
+      return this.sliding === 0
         ? ''
         : this.sliding > 0
-          ? 'slideRight'
-          : 'slideLeft'
+        ? 'slideRight'
+        : 'slideLeft'
+    },
+    itemStyles () {
+      const result = []
       for (let i = 0; i < this.windowSize; i++) {
         result.push({
           left: this.imagePos(i) + px,
           width: this.slideWidth + px,
-          animationDuration,
-          animationName
+          animationDuration: this.animationDuration,
+          animationName: this.animationName
         })
       }
       return result
@@ -171,9 +178,6 @@ export default {
         this.setSlide(this.targetIndex)
       }, this.slidingDuration)
     },
-    startAnimation () {
-      this.transPos = 0
-    },
     clearCycle () {
       try {
         clearInterval(this.intervalId)
@@ -185,6 +189,7 @@ export default {
       if (this.interval < 1) return
 
       setInterval(() => {
+        if (this.isMouseOver) return
         this.slide(1)
       }, this.interval)
     },
@@ -203,6 +208,9 @@ export default {
       style.type = 'text/css'
       style.appendChild(window.document.createTextNode(this.innerStyles))
       ref.appendChild(style)
+    },
+    mouseOver (v) {
+      this.isMouseOver = v
     }
   }
 }

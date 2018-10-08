@@ -2,7 +2,7 @@
   <div class="content">
     <div class="slider"
       :style="sliderStyle">
-      <div class="slider-wrapper">
+      <div class="slider-wrapper" @mouseover="mouseOver(true)" @mouseleave="mouseOver(false)">
         <div class="slider-item"
             :style="itemStyles[k]"
             v-for="(i, k) in slideImages"
@@ -36,6 +36,7 @@
         </li>
       </ul>
     </div>
+    <div ref="innerStyle"></div>
   </div>
 </template>
 

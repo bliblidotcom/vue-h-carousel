@@ -56,6 +56,7 @@ new window.Vue({
     :height="280"
     :leftWingWidth="200"
     :rightWingWidth="200"
+    :interval="3000"
     :postPaginationLabel="'/promosi'">
   </vue-h-zoom>`,
   components: { VueHZoom }
