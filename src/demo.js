@@ -54,9 +54,9 @@ new window.Vue({
   <vue-h-zoom :images="images"
     :width="840"
     :height="280"
-    :leftWingWidth="100"
-    :rightWingWidth="344"
-    :slidingDuration="2000">
+    :leftWingWidth="200"
+    :rightWingWidth="200"
+    :postPaginationLabel="'/promosi'">
   </vue-h-zoom>`,
   components: { VueHZoom }
 })
