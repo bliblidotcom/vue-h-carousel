@@ -58,7 +58,7 @@ new window.Vue({
     :leftWingWidth="200"
     :rightWingWidth="200"
     :interval="3000"
-    :slidingDuration="2000"
+    :slidingDuration="1000"
     :postPaginationLabel="label">
   </vue-h-zoom>`,
   components: { VueHZoom }
