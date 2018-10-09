@@ -1,6 +1,13 @@
 const px = 'px'
 const MOVE_THRESHOLD = 5
 
+const EVENTS = {
+  SLIDE_CLICKED: 'slideClicked',
+  PAGING_BUTTON_CLICKED: 'pagingButtonClicked',
+  ARROW_BUTTON_CLICKED: 'arrowButtonClicked',
+  POST_PAGINATION_LABEL_CLICKED: 'postPaginationLabelClicked'
+}
+
 export default {
   name: 'vue-h-carousel',
   data () {
@@ -154,8 +161,7 @@ export default {
       }
       @keyframes slideRight {
         to { transform: translateX(${-this.pixMove}px); }
-      }
-      `
+      }`
     }
   },
   methods: {
@@ -272,10 +278,29 @@ export default {
       this.transPos = distance
     },
     // handle opening window here
-    handleItemUrl (url, e) {
+    handleItemUrl (i, e) {
       e.preventDefault()
+      this.$emit(EVENTS.SLIDE_CLICKED, i)
       if (this.isDrag) return
-      window.open(url)
+      window.open(i.url)
+    },
+    arrowClick (v) {
+      this.$emit(EVENTS.ARROW_BUTTON_CLICKED, {
+        currentIndex: this.currentIndex,
+        direction: v > 0 ? 'right' : 'left'
+      })
+      this.slide(v)
+    },
+    pagingButtonClick (i) {
+      this.$emit(EVENTS.PAGING_BUTTON_CLICKED, {
+        currentIndex: this.currentIndex,
+        targetIndex: this.targetIndex,
+        item: this.images[i]
+      })
+      this.go(i)
+    },
+    postPaginationLabelClick () {
+      this.$emit(EVENTS.POST_PAGINATION_LABEL_CLICKED)
     },
     handleTouch () {
       const wrapper = this.$refs.wrapper

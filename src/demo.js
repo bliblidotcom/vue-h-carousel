@@ -16,39 +16,53 @@ new window.Vue({
   el: 'app',
   data () {
     return {
-      label: '<a href="/promosi">Lihat Semua Promo</a>',
+      label: '<a href="/promosi" target="_blank">Lihat Semua Promo</a>',
       images: [
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-1.png',
           alt: 'image 1'
         },
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-2.png',
           alt: 'image 2'
         },
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-3.png',
           alt: 'image 3'
         },
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-4.png',
           alt: 'image 4'
         },
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-5.png',
           alt: 'image 5'
         },
         {
-          url: 'http://abc.com',
+          url: 'http://www.blibli.com',
           src: 'assets/banner-main-6.png',
           alt: 'image 6'
         }
       ]
+    }
+  },
+  methods: {
+    slideClicked (i) {
+      console.log('sideClicked', JSON.stringify(i))
+    },
+    pagingButtonClicked (i) {
+      console.log('pagingButtonClicked', JSON.stringify(i))
+    },
+    arrowButtonClicked (i) {
+      console.log('arrowButtonClicked', JSON.stringify(i))
+    },
+    postPaginationLabelClicked () {
+      console.log('postPaginationLabelClicked')
     }
   },
   template: `
@@ -59,7 +73,12 @@ new window.Vue({
     :rightWingWidth="200"
     :interval="3000"
     :slidingDuration="1000"
-    :postPaginationLabel="label">
+    :postPaginationLabel="label"
+    @slideClicked="slideClicked"
+    @pagingButtonClicked="pagingButtonClicked"
+    @arrowButtonClicked="arrowButtonClicked"
+    @postPaginationLabelClicked="postPaginationLabelClicked"
+    >
   </vue-h-zoom>`,
   components: { VueHZoom }
 })

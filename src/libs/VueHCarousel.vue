@@ -13,18 +13,18 @@
              @mousedown="mouseDown"
              @mouseup="mouseUp"
              @mousemove="mouseMove">
-          <a @click="handleItemUrl(i.url, $event)" target="_blank">
+          <a @click="handleItemUrl(i, $event)" target="_blank">
             <img :src="i.src" :alt="i.alt"/>
           </a>
         </div>
       </div>
       <div class="slider-navigation">
         <div class="arrow arrow-right"
-          @click="slide(1)">
+          @click="arrowClick(1)">
           <img src="~assets/arrowright.png" alt=""/>
         </div>
         <div class="arrow arrow-left"
-          @click="slide(-1)">
+          @click="arrowClick(-1)">
           <img src="~assets/arrowleft.png" alt=""/>
         </div>
       </div>
@@ -33,11 +33,11 @@
       <ul class="button">
         <li
           v-for="(i, k) in images"
-          @click="go(k)"
+          @click="pagingButtonClick(k)"
           :class="{'active-slide': targetIndex === k}" :key="k">
           <span class="button-circle"></span>
         </li>
-        <li class="see-all" v-html="postPaginationLabel"></li>
+        <li class="see-all" v-html="postPaginationLabel" @click="postPaginationLabelClick"></li>
       </ul>
     </div>
     <div ref="innerStyle"></div>
