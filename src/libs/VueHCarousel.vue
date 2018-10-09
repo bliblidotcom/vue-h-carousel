@@ -34,7 +34,7 @@
         <li
           v-for="(i, k) in images"
           @click="go(k)"
-          :class="{'active-slide': currentIndex === k}" :key="k">
+          :class="{'active-slide': targetIndex === k}" :key="k">
           <span class="button-circle"></span>
         </li>
         <li class="see-all" v-html="postPaginationLabel"></li>
