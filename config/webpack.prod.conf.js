@@ -1,7 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -12,7 +13,8 @@ const commonConfig = {
     extensions: ['.js', '.vue'],
     alias: {
       vue: 'vue/dist/vue.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'assets': resolve('src/assets')
     }
   },
   output: {
@@ -36,6 +38,13 @@ const commonConfig = {
     {
       test: /\.css$/,
       loader: 'style!less!css'
+    },
+    {
+      test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+      loader: 'url-loader',
+      query: {
+        limit: 10000
+      }
     }]
   },
   externals: {
@@ -54,6 +63,15 @@ const commonConfig = {
       compress: {
         warnings: false
       }
+    }),
+    new CompressionWebpackPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: new RegExp(
+        '\\.(js|css)$'
+      ),
+      threshold: 1024,
+      minRatio: 0.8
     })
   ]
 }

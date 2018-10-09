@@ -147,14 +147,6 @@ export default {
     pixMove () {
       return Math.abs((this.distance * this.slideWidth) + this.transPos)
     },
-    touchHandlersMap () {
-      return {
-        touchstart: this.touchStart,
-        touchend: this.touchEnd,
-        touchcancel: this.touchCancel,
-        touchmove: this.touchMove
-      }
-    },
     innerStyles () {
       return `
       @keyframes slideLeft {

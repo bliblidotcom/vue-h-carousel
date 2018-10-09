@@ -15,7 +15,8 @@ module.exports = {
     extensions: ['.js', '.vue'],
     alias: {
       vue: 'vue/dist/vue.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'assets': resolve('src/assets')
     }
   },
   output: {
@@ -36,6 +37,13 @@ module.exports = {
         loaders: {
           js: 'babel-loader!eslint-loader'
         }
+      }
+    },
+    {
+      test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+      loader: 'url-loader',
+      query: {
+        limit: 10000
       }
     }]
   },

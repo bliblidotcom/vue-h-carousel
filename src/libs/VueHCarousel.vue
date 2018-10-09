@@ -21,11 +21,11 @@
       <div class="slider-navigation">
         <div class="arrow arrow-right"
           @click="slide(1)">
-          <img src="assets/arrowright.png" alt=""/>
+          <img src="~assets/arrowright.png" alt=""/>
         </div>
         <div class="arrow arrow-left"
           @click="slide(-1)">
-          <img src="assets/arrowleft.png" alt=""/>
+          <img src="~assets/arrowleft.png" alt=""/>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ Vue Carousel
 ## Installation
 
 ```js
-npm i --save-dev vue-h-carousel
+npm i --save vue-h-carousel
 ```
 
 ## About
@@ -42,31 +42,12 @@ Use in template for example as:
 <vue-h-carousel images=""></vue-h-carousel>
 ```
 
-## Important notes
-
-To be able to import image locally, you need to register the vue-h-carousel tag to the vue loader, add this to your
-webpack config:
-
-``` js
-{
-  test: /\.vue$/,
-  loader: 'vue-loader',
-  options: {
-    loaders: {
-    },
-    // other vue-loader options go here
-    transformToRequire: {
-      'vue-h-carousel': ['image', 'image-full']
-    }
-  }
-},
-```
 
 ## Parameters
 
 | Attribute        | Type                                            | Default              | Description      |
 | :---             | :---:                                           | :---:                | :---             |
-| image            | String | - | Image to be displayed in thumbnail. Used also in the carousel if imageFull param is not given (required) |
+| images           | String | - | Image to be displayed in thumbnail. Used also in the carousel if imageFull param is not given (required) |
 
 ## Preview
 
