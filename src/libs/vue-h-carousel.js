@@ -282,6 +282,8 @@ export default {
       e.preventDefault()
       this.$emit(EVENTS.SLIDE_CLICKED, i)
       if (this.isDrag) return
+      this.mouseOver(false)
+      this.isClicking = false
       window.open(i.url)
     },
     arrowClick (v) {
