@@ -256,6 +256,11 @@ export default {
       this.transPos = distance
     },
     mouseDown (e) {
+      if (e.which === 3 || // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
+        e.button === 2 // IE, Opera
+        ) {
+        return
+      }
       e.preventDefault()
       this.dragStartPos = e.clientX
       this.isClicking = true
@@ -279,12 +284,13 @@ export default {
     },
     // handle opening window here
     handleItemUrl (i, e) {
-      e.preventDefault()
       this.$emit(EVENTS.SLIDE_CLICKED, i)
-      if (this.isDrag) return
+      if (this.isDrag) {
+        e.preventDefault()
+        return
+      }
       this.mouseOver(false)
       this.isClicking = false
-      window.open(i.url)
     },
     arrowClick (v) {
       this.$emit(EVENTS.ARROW_BUTTON_CLICKED, {

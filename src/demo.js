@@ -21,22 +21,26 @@ new window.Vue({
         {
           url: 'http://www.blibli.com',
           src: 'assets/banner-main-1.png',
-          alt: 'image 1'
+          alt: 'image 1',
+          targetWindow: '_blank'
         },
         {
           url: 'http://www.blibli.com',
           src: 'assets/banner-main-2.png',
-          alt: 'image 2'
+          alt: 'image 2',
+          targetWindow: 'a'
         },
         {
           url: 'http://www.blibli.com',
           src: 'assets/banner-main-3.png',
-          alt: 'image 3'
+          alt: 'image 3',
+          targetWindow: 'a'
         },
         {
           url: 'http://www.blibli.com',
           src: 'assets/banner-main-4.png',
-          alt: 'image 4'
+          alt: 'image 4',
+          targetWindow: '_self'
         },
         {
           url: 'http://www.blibli.com',

@@ -13,7 +13,7 @@
              @mousedown="mouseDown"
              @mouseup="mouseUp"
              @mousemove="mouseMove">
-          <a @click="handleItemUrl(i, $event)" target="_blank">
+          <a :href="i.url" @click="handleItemUrl(i, $event)" :target="i.targetWindow || '_blank'">
             <img :src="i.src" :alt="i.alt"/>
           </a>
         </div>
