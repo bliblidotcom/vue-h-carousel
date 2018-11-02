@@ -1,19 +1,20 @@
 <template>
   <div class="content"
-       @mouseover="mouseOver(true)"
-       @mouseleave="mouseOver(false)">
+    @mouseover="mouseOver(true)"
+    @mouseleave="mouseOut"
+    @mousedown="mouseDown"
+    @mouseup="mouseUp"
+    @mousemove="mouseMove">
     <div class="slider"
       :style="sliderStyle">
       <div class="slider-wrapper" ref="wrapper">
         <div class="slider-item"
             :style="itemStyles[k]"
             v-for="(i, k) in slideImages"
-            :key="'image-slider-' + k"
+            :key="'image-slider-' + k">
+          <a :href="getUrl(i)"
              draggable="true"
-             @mousedown="mouseDown"
-             @mouseup="mouseUp"
-             @mousemove="mouseMove">
-          <a :href="i.url" @click="handleItemUrl(i, $event)" :target="i.targetWindow || '_blank'">
+             @click="handleItemUrl(i, $event)" :target="i.targetWindow || '_blank'">
             <img :src="i.src" :alt="i.alt"/>
           </a>
         </div>

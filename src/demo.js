@@ -39,8 +39,7 @@ new window.Vue({
         {
           url: 'http://www.blibli.com',
           src: 'assets/banner-main-4.png',
-          alt: 'image 4',
-          targetWindow: '_self'
+          alt: 'image 4'
         },
         {
           url: 'http://www.blibli.com',

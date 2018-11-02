@@ -55,5 +55,9 @@ module.exports = {
     }),
     new CopyWebpackPlugin([ { from: 'src/assets', to: 'assets' } ])
   ],
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  devServer: {
+    host: '0.0.0.0',
+    port: 8080
+  }
 }

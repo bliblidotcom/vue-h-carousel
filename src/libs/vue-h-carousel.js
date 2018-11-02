@@ -171,7 +171,11 @@ export default {
     },
     clearState () {
       this.transPos = 0
+    },
+    clearInteraction () {
       this.isDrag = false
+      this.isClicking = false
+      this.mouseOver(false)
     },
     slide (i) {
       this.go(this.currentIndex + Number(i))
@@ -265,7 +269,9 @@ export default {
       this.dragStartPos = e.clientX
       this.isClicking = true
     },
-    mouseUp () {
+    mouseUp (e) {
+      this.isClicking = false
+      this.isDrag = false
       if (Math.abs(this.transPos) < MOVE_THRESHOLD) {
         this.transPos = 0
         return
@@ -273,7 +279,6 @@ export default {
       const direction = this.transPos / Math.abs(this.transPos)
       const steps = -direction * Math.ceil(this.transPos / direction / this.slideWidth)
       this.slide(steps)
-      this.isClicking = false
     },
     mouseMove (e) {
       if (!this.isClicking) return
@@ -282,15 +287,14 @@ export default {
       const distance = pos - this.dragStartPos
       this.transPos = distance
     },
+    mouseOut () {
+      this.clearState()
+      this.clearInteraction()
+    },
     // handle opening window here
     handleItemUrl (i, e) {
       this.$emit(EVENTS.SLIDE_CLICKED, i)
-      if (this.isDrag) {
-        e.preventDefault()
-        return
-      }
-      this.mouseOver(false)
-      this.isClicking = false
+      this.clearInteraction()
     },
     arrowClick (v) {
       this.$emit(EVENTS.ARROW_BUTTON_CLICKED, {
@@ -327,6 +331,10 @@ export default {
       removeEL('touchend', this.touchEnd)
       removeEL('touchcancel', this.touchCancel)
       removeEL('touchmove', this.touchMove)
+    },
+    getUrl (i) {
+      if (this.isDrag) return null
+      return i.url
     }
   }
 }
