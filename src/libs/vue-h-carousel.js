@@ -265,9 +265,9 @@ export default {
         ) {
         return
       }
+      this.isClicking = true
       e.preventDefault()
       this.dragStartPos = e.clientX
-      this.isClicking = true
     },
     mouseUp (e) {
       this.isClicking = false
@@ -282,9 +282,10 @@ export default {
     },
     mouseMove (e) {
       if (!this.isClicking) return
-      this.isDrag = true
       const pos = e.clientX
       const distance = pos - this.dragStartPos
+      if (distance === 0) return
+      this.isDrag = true
       this.transPos = distance
     },
     mouseOut () {
